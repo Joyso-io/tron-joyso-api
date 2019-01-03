@@ -345,4 +345,4 @@ subscription.unsubscribe();
 The project is released under the [MIT license](http://www.opensource.org/licenses/MIT).
 
 ## Contact
-The project's website is located at https://github.com/Joyso-io/joyso-api
+The project's website is located at https://github.com/Joyso-io/tron-joyso-api
