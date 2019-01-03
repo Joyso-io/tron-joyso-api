@@ -1,7 +1,7 @@
 {
-  "name": "joyso",
+  "name": "tron-joyso",
   "version": "0.4.1",
-  "description": "JOYSO API client library for trading.",
+  "description": "JOYSO on Tron API client library for trading.",
   "main": "src/joyso.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,15 +17,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Joyso-io/joyso-api.git"
+    "url": "https://github.com/Joyso-io/tron-joyso-api.git"
   },
   "keywords": [
     "JOYSO",
     "api",
     "trading"
   ],
-  "homepage": "https://github.com/Joyso-io/joyso-api",
+  "homepage": "https://github.com/Joyso-io/tron-joyso-api",
   "bugs": {
-    "url": "https://github.com/Joyso-io/joyso-api/issues"
+    "url": "https://github.com/Joyso-io/tron-joyso-api/issues"
   }
 }

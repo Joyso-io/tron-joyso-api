@@ -16,13 +16,13 @@ const Account = require('./account');
 BigNumber.config({ DECIMAL_PLACES: 36 });
 
 const ACCESS_TOKEN_TIME = 600000;
-const ETH_MAX_FEE_PRICE = new BigNumber('100000000');
-const NON_ETH_MAX_FEE_PRICE = new BigNumber('1000000000000000000000000000');
+const MAX_FEE_PRICE = new BigNumber('100000000');
+const TOKEN_MAX_FEE_PRICE = new BigNumber('1000000000000000000000000000');
 const keys = {};
 
 class Joyso {
   constructor(options = {}) {
-    this.host = options.host || 'joyso.io';
+    this.host = options.host || 'tron.joyso.io';
     this.ssl = options.ssl === undefined ? true : options.ssl;
     let key = options.key;
     if (key.indexOf('0x') !== 0) {
@@ -120,7 +120,7 @@ class Joyso {
 
   repayWithdrawFee(token) {
     if (this.system.advanceable && this.account.advanceReal !== 0 && this.account.advanceInOrder === 0) {
-      const ratio = this.tokenManager.eth.withdrawFee.div(token.withdrawFee);
+      const ratio = this.tokenManager.trx.withdrawFee.div(token.withdrawFee);
       return new BigNumber(this.account.advanceReal).div(ratio).truncated().add(token.withdrawFee);
     } else {
       return token.withdrawFee;
@@ -137,8 +137,9 @@ class Joyso {
       tokenFee = this.tokenManager.joy;
       paymentMethod = 1;
     } else {
-      tokenFee = this.tokenManager.eth;
+      tokenFee = this.tokenManager.trx;
       paymentMethod = 0;
+      fee = 'eth';
     }
     token = this.tokenManager.symbolMap[token];
     if (!token) {
@@ -263,7 +264,7 @@ class Joyso {
 
   validateWithdraw(amount, fee) {
     this.validateAmount(amount);
-    if (fee !== 'eth' && fee !== 'joy' && fee !== 'token') {
+    if (fee !== 'trx' && fee !== 'joy' && fee !== 'token') {
       throw new Error('invalid fee');
     }
   }
@@ -287,7 +288,7 @@ class Joyso {
   }
 
   repayGasFee(token) {
-    const ratio = new BigNumber(this.tokenManager.eth.gasFee).div(token.gasFee);
+    const ratio = new BigNumber(this.tokenManager.trx.gasFee).div(token.gasFee);
     return new BigNumber(this.account.advanceReal).div(ratio).truncated().add(token.gasFee);
   }
 
@@ -341,19 +342,19 @@ class Joyso {
       }
       feePrice = tokenFee.price;
       let maxFeePrice, offset;
-      if (quote === this.tokenManager.eth) {
-        maxFeePrice = ETH_MAX_FEE_PRICE;
+      if (quote === this.tokenManager.trx) {
+        maxFeePrice = MAX_FEE_PRICE;
         offset = new BigNumber('10000000');
       } else {
-        const priceToEth = quote.price;
-        if (feePrice && priceToEth) {
+        const priceToTrx = quote.price;
+        if (feePrice && priceToTrx) {
           const decimalsOffset = new BigNumber(10).pow(tokenFee.decimals - quote.decimals);
           offset = new BigNumber('1000000000000').div(decimalsOffset);
-          feePrice = new BigNumber(feePrice).div(priceToEth);
+          feePrice = new BigNumber(feePrice).div(priceToTrx);
         } else {
           throw new Error('fee price invalid');
         }
-        maxFeePrice = NON_ETH_MAX_FEE_PRICE;
+        maxFeePrice = TOKEN_MAX_FEE_PRICE;
       }
       feePrice = feePrice.mul(offset).truncated();
       if (feePrice.gt(maxFeePrice)) {
@@ -382,7 +383,7 @@ class Joyso {
 
     const createHash = (nonce) => {
       let input;
-      if (quote === this.tokenManager.eth) {
+      if (quote === this.tokenManager.trx) {
         let data = _.padStart(nonce.toString(16), 8, '0');
         data += _.padStart(takerFee.toString(16), 4, '0');
         data += _.padStart(makerFee.toString(16), 4, '0');
@@ -531,7 +532,7 @@ class Joyso {
   }
 
   sign(message) {
-    const result = ethUtil.hashPersonalMessage(message);
+    const result = ethUtil.keccak256(Buffer.concat([new Buffer('\x19TRON Signed Message:\n32'), message]));
     const vrs = ethUtil.ecsign(result, ethUtil.toBuffer(keys[this.keyIndex]));
     return {
       v: vrs.v,

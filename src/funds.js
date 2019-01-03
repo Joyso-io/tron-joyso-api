@@ -95,8 +95,8 @@ class Funds {
         amount = this.client.tokenManager.toAmount(token, fund.amount);
       let tokenFee, fee;
       if (fund.payment_method === 0) {
-        tokenFee = this.client.tokenManager.eth;
-        fee = 'ETH';
+        tokenFee = this.client.tokenManager.trx;
+        fee = 'TRX';
       } else if (fund.payment_method === 1) {
         tokenFee = this.client.tokenManager.joy;
         fee = 'JOY'

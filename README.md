@@ -1,18 +1,15 @@
-# JOYSO
-JOYSO API client library for trading.
-
-## Notice
-v0.3.0 has breaking changes. Please see [CHANGELOG v0.3.0](https://github.com/Joyso-io/joyso-api/blob/master/CHANGELOG.md#v030--2018-10-16)
+# JOYSO on Tron
+JOYSO on Tron API client library for trading.
 
 ## Installation
 You can use this command to install:
 
-    npm install joyso
+    npm install tron-joyso
 
 ## Usage
 Setup and connect to JOYSO
 ```JavaScript
-const Joyso = require('joyso');
+const Joyso = require('tron-joyso');
 
 async function start() {
   const joyso = new Joyso({
@@ -28,7 +25,7 @@ async function start() {
 ### subscribeOrderBook(pair, callback)
 Subscribe order book, notify if change.
 ```JavaScript
-const subscription = joyso.subscribeOrderBook('JOY_ETH', orderBook => {
+const subscription = joyso.subscribeOrderBook('JOY_TRX', orderBook => {
   console.log(JSON.stringify(orderBook));
 });
 ```
@@ -37,21 +34,21 @@ Result:
 {
   "buy":[
     {
-      "price":0.000123456,
+      "price":1.23456,
       "amount":"8.5"
     },
     {
-      "price":0.000123455,
+      "price":1.23455,
       "amount":"98.5"
     }
   ],
   "sell":[
     {
-      "price":0.00012346,
+      "price":1.2346,
       "amount":"100"
     },
     {
-      "price":0.00012347,
+      "price":1.2347,
       "amount":"500"
     }
   ]
@@ -62,7 +59,7 @@ Result:
 ### subscribeTrades(pair, callback)
 Subscribe market trades, notify if change, return last 100 records.
 ```JavaScript
-const subscription = joyso.subscribeTrades('JOY_ETH', trades => {
+const subscription = joyso.subscribeTrades('JOY_TRX', trades => {
   console.log(JSON.stringify(trades.slice(0, 2)));
 });
 ```
@@ -72,16 +69,16 @@ Result
   {
     "id":317,
     "side":"sell",
-    "price":0.000123456,
+    "price":1.23456,
     "amount":"2",
-    "pair":"JOY_ETH"
+    "pair":"JOY_TRX"
   },
   {
     "id":315,
     "side":"buy",
-    "price":0.00012347,
+    "price":1.2347,
     "amount":"1",
-    "pair":"JOY_ETH"
+    "pair":"JOY_TRX"
   }
 ]
 ```
@@ -101,9 +98,9 @@ Result
     "inOrder":"0",
     "available":"4.5"
   },
-  "ETH":{
-    "inOrder":"0.001447757819",
-    "available":"0.097815997145"
+  "TRX":{
+    "inOrder":"144.7757819",
+    "available":"97815.997145"
   }
 }
 ```
@@ -123,19 +120,19 @@ Result
     "id":353,
     "status":"active",
     "side":"buy",
-    "price":0.000123481,
+    "price":12.3481,
     "amount":"1",
     "fill":"0",
-    "pair":"T00_ETH"
+    "pair":"T00_TRX"
   },
   {
     "id":326,
     "status":"partial",
     "side":"buy",
-    "price":0.000123456,
+    "price":1.23456,
     "amount":"12",
     "fill":"3.5",
-    "pair":"JOY_ETH"
+    "pair":"JOY_TRX"
   }
 ]
 ```
@@ -157,24 +154,24 @@ Result
     "status":"done",
     "txHash":"0xcf0aeb815200951559a38650a84f8eefa46411224e5e4076d6313ab47c7f9bb5",
     "side":"sell",
-    "price":0.000123456,
+    "price":1.23456,
     "amount":"2",
-    "pair":"JOY_ETH",
-    "fee":"ETH",
+    "pair":"JOY_TRX",
+    "fee":"TRX",
     "gasFee":"0",
-    "txFee":"2.46912e-7"
+    "txFee":"0.002469"
   },
   {
     "id":316,
     "status":"done",
     "txHash":"0x582cc7a84e8aa7e28e44b11e22f24169a34776915ebbc95a88fa0e77c44faf4c",
     "side":"sell",
-    "price":0.00012347,
+    "price":1.2347,
     "amount":"1",
-    "pair":"JOY_ETH",
-    "fee":"ETH",
+    "pair":"JOY_TRX",
+    "fee":"TRX",
     "gasFee":"0.000105",
-    "txFee":"2.4694e-7"
+    "txFee":"0.002469"
   }
 ]
 ```
@@ -195,10 +192,10 @@ Result
     "status":"done",
     "txHash":"0x4dbc49ae4735b1c230244d41377cf6aeccd70c5181df048e3be8306af8a487e6",
     "type":"withdraw",
-    "amount":"0.0099",
-    "token":"ETH",
-    "fee":"ETH",
-    "withdrawFee":"0.0001",
+    "amount":"99",
+    "token":"TRX",
+    "fee":"TRX",
+    "withdrawFee":"0.1",
     "timestamp":1537434044,
     "blockId":null
   },
@@ -207,8 +204,8 @@ Result
     "status":"done",
     "txHash":"0x8435bf9f69dd908373d50353ebab343b625527cd8ea44532eb01c8b0a5642879",
     "type":"withdraw",
-    "amount":"0.001",
-    "token":"ETH",
+    "amount":"1",
+    "token":"TRX",
     "fee":"JOY",
     "withdrawFee":"0.809841",
     "timestamp":1537433888,
@@ -225,8 +222,8 @@ Place buying order
 ```JavaScript
 try {
   let order = await joyso.buy({
-    pair: 'JOY_ETH',
-    price: '0.000123481',
+    pair: 'JOY_TRX',
+    price: '1.23481',
     amount: 1,
     feeByJoy: true
   });
@@ -243,10 +240,10 @@ Options
 
 |Name|Required|Description|
 |---|---|---|
-|pair|O|Pair to trade, format is `${base}_${quote}`, eg: JOY_ETH|
+|pair|O|Pair to trade, format is `${base}_${quote}`, eg: JOY_TRX|
 |price|O|Order price, minimum is 0.000000001|
 |amount|O|Quote amount|
-|feeByJoy||Specify how to pay fee. `true` will pay by JOY. `false` will pay by quote token(ETH if pair XXX_ETH). Default is `false`|
+|feeByJoy||Specify how to pay fee. `true` will pay by JOY. `false` will pay by quote token(TRX if pair XXX_TRX). Default is `false`|
 
 Result
 ```JSON
@@ -254,10 +251,10 @@ Result
   "id":361,
   "status":"complete",
   "side":"buy",
-  "price":0.000123481,
+  "price":1.23481,
   "amount":"1",
   "fill":"1",
-  "pair":"JOY_ETH"
+  "pair":"JOY_TRX"
 }
 ```
 * amount and fill are BigNumber objects.
@@ -267,8 +264,8 @@ Result
 Place selling order
 ```JavaScript
 let order = await joyso.sell({
-  pair: 'JOY_ETH',
-  price: '0.000123481',
+  pair: 'JOY_TRX',
+  price: '1.23481',
   amount: 100
 });
 ```
@@ -279,8 +276,8 @@ Place order
 ```JavaScript
 let order = await joyso.trade({
   side: 'buy',
-  pair: 'JOY_ETH',
-  price: '0.000123481',
+  pair: 'JOY_TRX',
+  price: '1.23481',
   amount: 100
 });
 ```
@@ -294,9 +291,9 @@ Options and result are same with buy. One extra options
 Withdraw
 ```JavaScript
 await joyso.withdraw({
-  token: 'ETH',
-  amount: 0.01,
-  fee: 'eth'
+  token: 'TRX',
+  amount: 10,
+  fee: 'trx'
 });
 ```
 Options
@@ -305,13 +302,13 @@ Options
 |---|---|---|
 |token|O|Token to withdraw|
 |amount|O|Amount to withdraw|
-|fee|O|Specify how to pay fee. `eth`, `joy` or `token`. `token` can only be used when token is quote token.|
+|fee|O|Specify how to pay fee. `trx`, `joy` or `token`. `token` can only be used when token is quote token.|
 
 ### getMyTrades({ from, to, quote, base, side, before, limit })
 Get my trades
 ```JavaScript
 await joyso.getMyTrades({
-  quote: 'ETH',
+  quote: 'TRX',
   base: 'JOY',
   side: 'sell',
   from: 1539129600,

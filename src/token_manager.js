@@ -57,7 +57,7 @@ class TokenManager {
       this.symbolMap[t.symbol] = t;
       this.addressMap[t.address] = t;
     });
-    this.eth = this.symbolMap.ETH;
+    this.trx = this.symbolMap.TRX;
     this.joy = this.symbolMap.JOY;
     this.quotes = json.quotes.map(t => {
       const token = this.addressMap[`0x${t.address}`];
@@ -65,7 +65,7 @@ class TokenManager {
       return token;
     });
     this.pairs = {};
-    this.pairs['ETH'] = new Set(this.tokens.map(t => t.symbol));
+    this.pairs['TRX'] = new Set(this.tokens.map(t => t.symbol));
     Object.keys(json.pairs).forEach(k => this.pairs[k] = new Set(json.pairs[k]));
     Object.keys(json.hidden_pairs).forEach(k => {
       const set = this.pairs[k];
